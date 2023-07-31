@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public abstract class RepositoryBase {
-    private String USERNAME = "it191_courseproject";
-    private String PASSWORD = "it191_courseproject";
-    private final String LINK = "jdbc:mysql://localhost:3306?useTimezone=true&serverTimezone=UTC";
+    private String USERNAME = "sql6636483";
+    private String PASSWORD = "v2rfhrF38K";
+    private final String LINK = "jdbc:mysql://sql6.freemysqlhosting.net:3306?useTimezone=true&serverTimezone=UTC";
     private final String CONNECTOR = "com.mysql.cj.jdbc.Driver";
 
     public RepositoryBase() {
@@ -20,7 +20,7 @@ public abstract class RepositoryBase {
             Connection sql_con = DriverManager.getConnection(LINK, USERNAME, PASSWORD);
             
             Statement SetDB = sql_con.createStatement();
-            SetDB.executeUpdate("USE it191_course_project");
+            SetDB.executeUpdate("USE sql6636483");
 
             return sql_con;
     
