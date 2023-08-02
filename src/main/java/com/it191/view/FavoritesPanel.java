@@ -14,10 +14,14 @@ public class FavoritesPanel extends JPanel implements ISongUpdateListener {
 
     private FavoritesController favoritesController;
     private ISongRequestListener songRequestListener;
+    private String songFilterQuery;
+
+    private ArrayList<SongModel> loadedSongs;
 
     public FavoritesPanel() {
         this.onUISetup();
-        favoritesController = new FavoritesController();
+        this.favoritesController = new FavoritesController();
+        this.songFilterQuery = "";
     }
 
     public void setSongRequestListener(ISongRequestListener songRequestListener) {
@@ -29,11 +33,24 @@ public class FavoritesPanel extends JPanel implements ISongUpdateListener {
         this.setLayout(new java.awt.GridLayout(10, 1));
     }
 
+    public void setSongFilterByName(String name) {
+        this.songFilterQuery = name;
+        this.onRefreshSongs();
+    }
+
+    public void onForceDatabaseReload() {
+        this.loadedSongs = favoritesController.getFavoriteSongs();
+        this.onRefreshSongs();
+    }
+
     public void onRefreshSongs() {
         this.removeAll();
 
-        ArrayList<SongModel> songs = favoritesController.getFavoriteSongs();
-        for (SongModel songModel : songs) {
+        for (SongModel songModel : loadedSongs) {
+
+            if(!songModel.getTitle().toLowerCase().contains(songFilterQuery.toLowerCase()) && !songFilterQuery.trim().isEmpty())
+                continue;
+
             SongItem songItem = new SongItem(songModel);
             songItem.setSongRequestListener(songRequestListener);
             songItem.setSongUpdateListener(this);
@@ -42,7 +59,6 @@ public class FavoritesPanel extends JPanel implements ISongUpdateListener {
 
         this.repaint();
         this.revalidate();
-        
     }
 
     @Override
@@ -53,6 +69,6 @@ public class FavoritesPanel extends JPanel implements ISongUpdateListener {
             favoritesController.removeSongFromFavorites(evt);
         }
 
-        this.onRefreshSongs();
+        this.onForceDatabaseReload();
     }
 }
